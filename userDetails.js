@@ -15,10 +15,10 @@ async function postUserDetails(ceaNo, mobile, email, username, password, first, 
     await db.collection("user_details").insertOne({
 
         "ceaNo": ceaNo,
-        "contact": { 'mobile': mobile, 'email': email },
-        "login": { 'username': username, 'password': password },
-        "name": { 'first': first, 'last': last },
-        'created': timestamp
+        "contact": { "mobile": mobile, "email": email },
+        "login": { "username": username, "password": password },
+        "name": { "first": first, "last": last },
+        "created": timestamp
 
     });
 
@@ -30,12 +30,12 @@ async function putUserDetails(id, ceaNo, mobile, email, username, password, firs
     await db.collection("user_details").updateOne({
         "_id": new ObjectId(id)
     }, {
-        '$set': {
-            'ceaNo': ceaNo,
-            'contact': { 'mobile': mobile, 'email': email },
-            'login': { 'username': username, 'password': password },
-            'name': { 'first': first, 'last': last },
-            'created': timestamp
+        "$set": {
+            "ceaNo": ceaNo,
+            "contact": { "mobile": mobile, "email": email },
+            "login": { "username": username, "password": password },
+            "name": { "first": first, "last": last },
+            "created": timestamp
         }
     });
 }

@@ -72,6 +72,31 @@ async function main() {
 
     })
 
+    // Post listing_details
+    app.post("/listing_details/create/:pid/:uid", async function (req, res) {
+        // let {pid, uid} = req.body
+        let {pid, uid}  = req.params
+        let {type, subType, term} = req.body.listingType
+        let {amount, state, builtPsf, landPsf} = req.body.price
+        let {built, land} = req.body.size
+        let {headline, mainText, maintFee, gst} = req.body.description
+        let {photo, video} = req.body.media
+        let timestamp = new Date().toISOString()
+
+        try{
+            await listingDetails.postListingDetails(pid, uid, type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
+            res.status(200)
+            res.send("listing data inserted")
+        }catch (e) {
+            res.status(500);
+            res.send(e);
+            console.log(e);
+        }
+
+
+
+
+    })
     // PUT
 
     // Put user_details
@@ -113,6 +138,11 @@ async function main() {
         }
     })
 
+    // Put listing_details
+    app.put("/listing_details/update/:id", async function (req, res) {
+        let id = req.params.id
+        
+    })
 
 
     // DELETE
