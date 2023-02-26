@@ -56,12 +56,12 @@ async function main() {
     // Post property_details
     app.post("/property_details/create", async function (req, res) {
         let { country, postalCode, streetName, block, unit, project } = req.body.address;
-        let { district, tenure, top } = req.body;
+        let { district, tenure, top, coordinates } = req.body;
         let { type, subType } = req.body.propertyType;
         let timestamp = new Date().toISOString()
 
         try {
-            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, timestamp)
+            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp)
             res.status(200)
             res.send("property data inserted")
         } catch (e) {
@@ -123,12 +123,12 @@ async function main() {
     app.put("/property_details/update/:id", async function (req, res) {
         let id = req.params.id
         let { country, postalCode, streetName, block, unit, project } = req.body.address;
-        let { district, tenure, top } = req.body;
+        let { district, tenure, top, coordinates } = req.body;
         let { type, subType } = req.body.propertyType;
         let timestamp = new Date().toISOString()
 
         try {
-            await propertyDetails.putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, timestamp)
+            await propertyDetails.putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp)
             res.status(200);
             res.send("property data updated");
         } catch (e) {

@@ -12,7 +12,7 @@ async function getPropertyDetails() {
 }
 
 
-async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, timestamp) {
+async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp) {
     const db = connectMongo.getDB();
     await db.collection("property_details").insertOne({
 
@@ -21,11 +21,12 @@ async function postPropertyDetails(country, postalCode, streetName, block, unit,
         "propertyType": { 'type': type, 'subType': subType },
         "tenure": tenure,
         "top": top,
+        "coordinates": coordinates,
         'created': timestamp
     });
 };
 
-async function putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, timestamp) {
+async function putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp) {
     const db = connectMongo.getDB();
     await db.collection("property_details").updateOne({
         "_id": new ObjectId(id)
@@ -36,6 +37,7 @@ async function putPropertyDetails(id, country, postalCode, streetName, block, un
             "propertyType": { 'type': type, 'subType': subType },
             "tenure": tenure,
             "top": top,
+            "coordinates": coordinates,
             'created': timestamp
         }
     });
