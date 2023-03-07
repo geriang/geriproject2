@@ -3,6 +3,8 @@ const ObjectId = require('mongodb').ObjectId;
 
 
 
+
+
 async function getPropertyDetails() {
     const db = connectMongo.getDB()
     const result = await db.collection("property_details").find().limit(10).toArray();
@@ -12,9 +14,14 @@ async function getPropertyDetails() {
 }
 
 
-async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp) {
-    const db = connectMongo.getDB();
+async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp, lid) {
+    const db = connectMongo.getDB(); 
+
+    let listingId = new ObjectId(lid)
+    console.log(listingId)
+     
     await db.collection("property_details").insertOne({
+        
 
         "address": { "country": country, "postalCode": postalCode, "streetName": streetName, "block": block, "unit": unit, "project": project },
         "district": district,
@@ -22,7 +29,8 @@ async function postPropertyDetails(country, postalCode, streetName, block, unit,
         "tenure": tenure,
         "top": top,
         "coordinates": coordinates,
-        'created': timestamp
+        "created": timestamp,
+        "listing_details": [{"$oid": listingId}]
     });
 };
 

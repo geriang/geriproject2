@@ -43,7 +43,7 @@ async function main() {
         let timestamp = new Date().toISOString()
 
         try {
-            const data = await userDetails.postUserDetails(ceaNo, mobile, email, username, password, first, last, timestamp);
+            await userDetails.postUserDetails(ceaNo, mobile, email, username, password, first, last, timestamp);
             res.status(200)
             res.send("user data inserted")
         } catch (e) {
@@ -58,10 +58,12 @@ async function main() {
         let { country, postalCode, streetName, block, unit, project } = req.body.address;
         let { district, tenure, top, coordinates } = req.body;
         let { type, subType } = req.body.propertyType;
+        let { lid } = req.body.listing_details[0];
         let timestamp = new Date().toISOString()
+       
 
         try {
-            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp)
+            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp, lid)
             res.status(200)
             res.send("property data inserted")
         } catch (e) {
@@ -73,30 +75,54 @@ async function main() {
     })
 
     // Post listing_details
-    app.post("/listing_details/create/:pid/:uid", async function (req, res) {
+
+    app.post("/listing_details/create/", async function (req, res) {
         // let {pid, uid} = req.body
-        let {pid, uid}  = req.params
-        let {type, subType, term} = req.body.listingType
-        let {amount, state, builtPsf, landPsf} = req.body.price
-        let {built, land} = req.body.size
-        let {headline, mainText, maintFee, gst} = req.body.description
-        let {photo, video} = req.body.media
+        // let {pid, uid}  = req.params
+        let { type, subType, term } = req.body.listingType
+        let { amount, state, builtPsf, landPsf } = req.body.price
+        let { built, land } = req.body.size
+        let { headline, mainText, maintFee, gst } = req.body.description
+        let { photo, video } = req.body.media
         let timestamp = new Date().toISOString()
 
-        try{
-            await listingDetails.postListingDetails(pid, uid, type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
+        try {
+            const listingId = await listingDetails.postListingDetails(type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
             res.status(200)
-            res.send("listing data inserted")
-        }catch (e) {
+            res.json({ success: true, "id": listingId });
+            // res.send("listing data inserted")    
+
+        } catch (e) {
             res.status(500);
             res.send(e);
             console.log(e);
         }
 
-
-
-
     })
+
+    // app.post("/listing_details/create/:pid/:uid", async function (req, res) {
+    //     // let {pid, uid} = req.body
+    //     let {pid, uid}  = req.params
+    //     let {type, subType, term} = req.body.listingType
+    //     let {amount, state, builtPsf, landPsf} = req.body.price
+    //     let {built, land} = req.body.size
+    //     let {headline, mainText, maintFee, gst} = req.body.description
+    //     let {photo, video} = req.body.media
+    //     let timestamp = new Date().toISOString()
+
+    //     try{
+    //         const listing = await listingDetails.postListingDetails(pid, uid, type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
+    //         res.status(200)
+    //         res.json({ success: true, "id":listing });
+    //         // res.send("listing data inserted")    
+
+    //     }catch (e) {
+    //         res.status(500);
+    //         res.send(e);
+    //         console.log(e);
+    //     }
+
+    // })
     // PUT
 
     // Put user_details
@@ -141,7 +167,7 @@ async function main() {
     // Put listing_details
     app.put("/listing_details/update/:id", async function (req, res) {
         let id = req.params.id
-        
+
     })
 
 
