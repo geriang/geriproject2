@@ -1,12 +1,34 @@
 const connectMongo = require('./connectMongo');
 const ObjectId = require('mongodb').ObjectId;
 
-async function getListingDetails() {
-    const db = connectMongo.getDB();
-    const result = await db.collection("listing_details").find().limit(10).toArray();
-    return result;
-}
+// async function getListingDetails() {
+//     const db = connectMongo.getDB();
+//     const result = await db.collection("listing_details").find().toArray();
+//     return result;
+// }
 
+
+// async function getListingDetails() {
+//     const db = connectMongo.getDB();
+//     const result = await db.collection.aggregate([
+//         {
+//             $lookup: {
+//                 from: "property_listing",
+//                 localField: "referencedObjectId"
+//             }
+//         }
+//     ])
+// }
+// db.collection.aggregate([
+//     {
+//       $lookup: {
+//         from: "referencedObject",
+//         localField: "referencedObjectId",
+//         foreignField: "_id",
+//         as: "referencedObject"
+//       }
+//     }
+//   ])
 // async function postListingDetails(pid, uid, type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp) {
 //     const db = connectMongo.getDB();
 //     const result = await db.collection("listing_details").insertOne({
@@ -138,4 +160,4 @@ async function putListingDetails(id, pid, uid, type, subType, term, amount, stat
 
 
 
-module.exports = { getListingDetails, postListingDetails, putListingDetails }
+module.exports = { postListingDetails, putListingDetails }

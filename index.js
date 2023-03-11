@@ -6,8 +6,9 @@ const ObjectId = require('mongodb').ObjectId;
 const userDetails = require('./userDetails');
 const propertyDetails = require('./propertyDetails');
 const listingDetails = require('./listingDetails');
-
+const axios = require('axios');
 const mongoUri = process.env.MONGO_URI;
+const chatGptApikey = process.env.OPENAI_APIKEY;
 
 const app = express();
 
@@ -31,10 +32,18 @@ async function main() {
         res.send(data)
     })
 
+    // app.get('/listing_details', async function (req, res) {
+    //     const data = await listingDetails.getListingDetails();
+    //     res.status(200)
+    //     res.send(data)
+    // })
+
 
     // POST
 
+
     // Post user_details
+
     app.post('/user_details/create', async function (req, res) {
         let { ceaNo } = req.body;
         let { mobile, email } = req.body.contact
@@ -58,7 +67,7 @@ async function main() {
         let { country, postalCode, streetName, block, unit, project } = req.body.address;
         let { district, tenure, top, coordinates } = req.body;
         let { type, subType } = req.body.propertyType;
-        let { lid } = req.body.listing_details[0];
+        let { lid } = req.body.listingDetails[0];
         let timestamp = new Date().toISOString()
        
 
@@ -75,10 +84,7 @@ async function main() {
     })
 
     // Post listing_details
-
     app.post("/listing_details/create/", async function (req, res) {
-        // let {pid, uid} = req.body
-        // let {pid, uid}  = req.params
         let { type, subType, term } = req.body.listingType
         let { amount, state, builtPsf, landPsf } = req.body.price
         let { built, land } = req.body.size
@@ -89,8 +95,7 @@ async function main() {
         try {
             const listingId = await listingDetails.postListingDetails(type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
             res.status(200)
-            res.json({ success: true, "id": listingId });
-            // res.send("listing data inserted")    
+            res.json({ success: true, "id": listingId });  
 
         } catch (e) {
             res.status(500);
@@ -100,29 +105,36 @@ async function main() {
 
     })
 
-    // app.post("/listing_details/create/:pid/:uid", async function (req, res) {
-    //     // let {pid, uid} = req.body
-    //     let {pid, uid}  = req.params
-    //     let {type, subType, term} = req.body.listingType
-    //     let {amount, state, builtPsf, landPsf} = req.body.price
-    //     let {built, land} = req.body.size
-    //     let {headline, mainText, maintFee, gst} = req.body.description
-    //     let {photo, video} = req.body.media
-    //     let timestamp = new Date().toISOString()
+    // Post to ChatGPT
+    app.post('/filldescription', async (req, res) => {
+        let { message } = req.body;
+    
+        const parameters = {
+            prompt: message,
+            max_tokens: 3000,
+            model: 'text-davinci-003',
+            temperature: 0.5,
+            n: 1,
+            stream: false
+        };
+    
+        try {
+            const response = await axios.post('https://api.openai.com/v1/completions', parameters, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + chatGptApikey,
+                },
+            });
+            const descriptionValue = response.data.choices[0].text.trim();
+            res.send({"reply" : descriptionValue});
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Error generating property description');
+        }
+    });
+    
 
-    //     try{
-    //         const listing = await listingDetails.postListingDetails(pid, uid, type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp)
-    //         res.status(200)
-    //         res.json({ success: true, "id":listing });
-    //         // res.send("listing data inserted")    
-
-    //     }catch (e) {
-    //         res.status(500);
-    //         res.send(e);
-    //         console.log(e);
-    //     }
-
-    // })
+   
     // PUT
 
     // Put user_details

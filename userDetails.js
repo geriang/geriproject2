@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 async function getUserDetails() {
     const db = connectMongo.getDB()
-    const result = await db.collection("user_details").find().limit(10).toArray();
+    const result = await db.collection("user_details").find().toArray();
     return result
 
 }

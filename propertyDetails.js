@@ -2,16 +2,59 @@ const connectMongo = require('./connectMongo');
 const ObjectId = require('mongodb').ObjectId;
 
 
+// const array1 = [{"id": "1"}, {"id":"2"}];
+// const array2 = [{"id": "1", "time":"10"}, {"id":"2", "time":"9"}];
+
+// // Pass a function to map
+// const map1 = array1.map(x => {
+//   const id = x.id
+//   const array2item = array2.find(y => y.id===id)
+//   x.info=array2item
+//   return x
+// });
 
 
+
+// async function getPropertyDetails() {
+//     const db = connectMongo.getDB()
+//     const result = await db.collection("property_details").find().toArray();
+    
+//     console.log(result)
+
+//     return result
+// }
+
+// array.map( , ) => ()
+
+// async function getListingDetails(){
+//     const db = connectMongo.getDB()
+//     const result = await db.collection("listing_details").find().toArray();
+
+// }
 
 async function getPropertyDetails() {
     const db = connectMongo.getDB()
-    const result = await db.collection("property_details").find().limit(10).toArray();
-    console.log(result)
-    return result
+    const result = await db.collection("property_details").aggregate([
+        {
+            $lookup: {
+              from: "listing_details",
+              localField: "listingDetails._id",
+              foreignField: "_id",
+              as: "listingDetails"
+            }
+          }
+        ]).toArray();
+      
+        console.log(result);
+        return result;
+      }
+    
+      
+      
+      
+      
+      
 
-}
 
 
 async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, top, coordinates, timestamp, lid) {
@@ -30,7 +73,7 @@ async function postPropertyDetails(country, postalCode, streetName, block, unit,
         "top": top,
         "coordinates": coordinates,
         "created": timestamp,
-        "listing_details": [{"$oid": listingId}]
+        "listingDetails": [{"_id": listingId}]
     });
 };
 
