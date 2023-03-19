@@ -15,21 +15,21 @@ async function getPropertyDetails() {
         }
     ]).toArray();
 
-    console.log(result);
+    // console.log(result);
     return result;
 }
 
 
-async function postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, wef, top, coordinates, timestamp, lid) {
+async function postPropertyDetails(country, postalCode, streetName, block, project, district, type, subType, tenure, wef, top, coordinates, timestamp, _id) {
     const db = connectMongo.getDB();
-
-    let listingId = new ObjectId(lid)
-    console.log(listingId)
+    
+    console.log(_id)
+    console.log(country)
+ 
 
     await db.collection("property_details").insertOne({
 
-
-        "address": { "country": country, "postalCode": postalCode, "streetName": streetName, "block": block, "unit": unit, "project": project },
+        "address": { "country": country, "postalCode": postalCode, "streetName": streetName, "block": block, "project": project },
         "district": district,
         "propertyType": { 'type': type, 'subType': subType },
         "tenure": tenure,
@@ -37,23 +37,39 @@ async function postPropertyDetails(country, postalCode, streetName, block, unit,
         "top": top,
         "coordinates": coordinates,
         "created": timestamp,
-        "listingDetails": [{ "_id": listingId }]
+        "listingDetails": [{ "_id": new ObjectId(_id) }]
     });
 };
 
-async function putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, wef, top, coordinates, timestamp) {
+// async function putPropertyDetails(id, country, postalCode, streetName, block, unit, project, district, type, subType, tenure, wef, top, coordinates, timestamp) {
+//     const db = connectMongo.getDB();
+//     await db.collection("property_details").updateOne({
+//         "_id": new ObjectId(id)
+//     }, {
+//         '$set': {
+//             "address": { "country": country, "postalCode": postalCode, "streetName": streetName, "block": block, "unit": unit, "project": project },
+//             "district": district,
+//             "propertyType": { 'type': type, 'subType': subType },
+//             "tenure": tenure,
+//             "wef": wef,
+//             "top": top,
+//             "coordinates": coordinates,
+//             'created': timestamp,   
+//         }
+//     });
+// }
+
+async function putPropertyDetails(id, project, type, subType, tenure, wef, top, timestamp) {
     const db = connectMongo.getDB();
     await db.collection("property_details").updateOne({
         "_id": new ObjectId(id)
     }, {
         '$set': {
-            "address": { "country": country, "postalCode": postalCode, "streetName": streetName, "block": block, "unit": unit, "project": project },
-            "district": district,
+            "address.project": project ,
             "propertyType": { 'type': type, 'subType': subType },
             "tenure": tenure,
             "wef": wef,
             "top": top,
-            "coordinates": coordinates,
             'created': timestamp,   
         }
     });

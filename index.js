@@ -92,15 +92,15 @@ async function main() {
 
     // Post property_details
     app.post("/property_details/create", async function (req, res) {
-        let { country, postalCode, streetName, block, unit, project } = req.body.address;
+        let { country, postalCode, streetName, block, project } = req.body.address;
         let { district, tenure, wef, top, coordinates } = req.body;
         let { type, subType } = req.body.propertyType;
-        let { lid } = req.body.listingDetails[0];
+        let { _id } = req.body.listingDetails[0];
         let timestamp = new Date().toISOString()
-
+        console.log(_id)
 
         try {
-            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, unit, project, district, type, subType, tenure, wef, top, coordinates, timestamp, lid)
+            await propertyDetails.postPropertyDetails(country, postalCode, streetName, block, project, district, type, subType, tenure, wef, top, coordinates, timestamp, _id)
             res.status(200)
             res.send("property data inserted")
         } catch (e) {
@@ -139,12 +139,12 @@ async function main() {
         let { message } = req.body;
 
         const parameters = {
-            prompt: message,
-            max_tokens: 3000,
-            model: 'text-davinci-003',
-            temperature: 0.5,
-            n: 1,
-            stream: false
+            "prompt": message,
+            "max_tokens": 3000,
+            "model": 'text-davinci-003',
+            "temperature": 0.5,
+            "n": 1,
+            "stream": false
         };
 
         try {

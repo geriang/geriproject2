@@ -69,7 +69,7 @@ const ObjectId = require('mongodb').ObjectId;
 // }
 
 
-async function postListingDetails(type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, timestamp) {
+async function postListingDetails(type, subType, term, amount, state, builtPsf, landPsf, built, land, headline, mainText, maintFee, gst, photo, video, unit, rooms, timestamp) {
     const db = connectMongo.getDB();
     const resultId = await db.collection("listing_details").insertOne({
 
@@ -104,6 +104,7 @@ async function postListingDetails(type, subType, term, amount, state, builtPsf, 
 
     })
     let returnId = resultId.insertedId
+    // console.log(returnId)
     return returnId
 
 }
