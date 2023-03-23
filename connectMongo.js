@@ -15,4 +15,4 @@ function getDB() {
 }
 
 // share the connect and getDB functions with other JS files
-module.exports = { connect, getDB }
+module.exports = { connect, getDB };
