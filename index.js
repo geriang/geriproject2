@@ -7,7 +7,6 @@ const userDetails = require('./userDetails');
 const propertyDetails = require('./propertyDetails');
 const listingDetails = require('./listingDetails');
 const axios = require('axios');
-const mongoUri = process.env.MONGO_URI;
 const chatGptApikey = process.env.OPENAI_APIKEY;
 
 
