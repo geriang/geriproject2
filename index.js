@@ -21,6 +21,7 @@ app.use(cors({
 }));
 
 async function main() {
+    mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zmiiogz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
     await connectMongo.connect(mongoUri, "project");
 
     // GET
