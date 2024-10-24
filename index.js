@@ -15,7 +15,10 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.DEV_CLIENT, // Set this to the origin making the request
+    credentials: true, // Allow credentials (cookies) to be sent with requests
+}));
 
 async function main() {
     await connectMongo.connect(mongoUri, "project");
