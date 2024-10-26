@@ -12,6 +12,15 @@ const chatGptApikey = process.env.OPENAI_APIKEY;
 
 const app = express();
 
+// Add middleware to set CORS headers explicitly
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
 app.use(cors({
     origin: 'https://vue.gach.work',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -31,6 +40,15 @@ async function connectDB() {
     }
 
 connectDB()
+
+// Handle preflight requests
+app.options('*', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(200);
+});
 
 // GET
 
@@ -282,8 +300,10 @@ app.delete("/listing_details/delete/:id", async function (req, res) {
 
 
 
-
-app.listen(5000, function () {
-    console.log("app started")
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;
 
