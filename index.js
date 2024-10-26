@@ -13,18 +13,15 @@ const chatGptApikey = process.env.OPENAI_APIKEY;
 const app = express();
 
 app.use(cors({
-    origin: 'https://vue.gach.work', // Set this to the origin making the request
-    credentials: false, // Allow credentials (cookies) to be sent with requests
-    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
-    // allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Add necessary headers
+    origin: 'https://vue.gach.work',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    exposedHeaders: ['Access-Control-Allow-Origin']
 }));
 
-// app.options('*', cors({
-//     origin: 'https://vue.gach.work',
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-// }));
+// Enable pre-flight requests for all routes
+app.options('*', cors());
 
 app.use(express.json());
 
