@@ -12,8 +12,6 @@ const chatGptApikey = process.env.OPENAI_APIKEY;
 
 const app = express();
 
-app.use(express.json());
-
 app.use(cors({
     origin: 'https://vue.gach.work', // Set this to the origin making the request
     credentials: true, // Allow credentials (cookies) to be sent with requests
@@ -21,15 +19,17 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Add necessary headers
 }));
 
-app.options('*', cors({
-    origin: 'https://vue.gach.work',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+// app.options('*', cors({
+//     origin: 'https://vue.gach.work',
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+// }));
+
+app.use(express.json());
 
 async function connectDB() {
-    mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zmiiogz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+    const mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zmiiogz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
     await connectMongo.connect(mongoUri, "project");
     }
 
