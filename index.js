@@ -15,8 +15,8 @@ const app = express();
 app.use(cors({
     origin: 'https://vue.gach.work', // Set this to the origin making the request
     credentials: false, // Allow credentials (cookies) to be sent with requests
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Add necessary headers
+    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
+    // allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Add necessary headers
 }));
 
 // app.options('*', cors({
@@ -36,6 +36,11 @@ async function connectDB() {
 connectDB()
 
 // GET
+
+app.get('/test-cors', (req, res) => {
+    res.json({ message: 'CORS test successful' });
+});
+
 // get property details and listing details embedded
 app.get('/property_details', async function (req, res) {
     const data = await propertyDetails.getPropertyDetails();
