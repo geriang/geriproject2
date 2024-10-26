@@ -14,12 +14,21 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors({
-    origin: process.env.DEV_CLIENT, // Set this to the origin making the request
-    credentials: true, // Allow credentials (cookies) to be sent with requests
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Add necessary headers
-}));
+// app.use(cors({
+//     origin: process.env.DEV_CLIENT, // Set this to the origin making the request
+//     credentials: true, // Allow credentials (cookies) to be sent with requests
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
+//     allowedHeaders: ['Content-Type', 'Authorization'], // Add necessary headers
+// }));
+
+// app.use to replace cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', process.env.DEV_CLIENT);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 
 async function connectDB() {
     mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zmiiogz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
