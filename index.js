@@ -13,13 +13,13 @@ const chatGptApikey = process.env.OPENAI_APIKEY;
 const app = express();
 
 // Add middleware to set CORS headers explicitly
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     res.setHeader('Access-Control-Allow-Credentials', 'true');
+//     next();
+// });
 
 app.use(cors({
     origin: 'https://vue.gach.work',
@@ -41,21 +41,16 @@ async function connectDB() {
 
 connectDB()
 
-// Handle preflight requests
-app.options('*', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.sendStatus(200);
-});
+// // Handle preflight requests
+// app.options('*', (req, res) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'https://vue.gach.work');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     res.setHeader('Access-Control-Allow-Credentials', 'true');
+//     res.sendStatus(200);
+// });
 
 // GET
-
-app.get('/test-cors', (req, res) => {
-    res.json({ message: 'CORS test successful' });
-});
-
 // get property details and listing details embedded
 app.get('/property_details', async function (req, res) {
     const data = await propertyDetails.getPropertyDetails();
