@@ -14,7 +14,7 @@ const app = express();
 
 app.use(cors({
     origin: 'https://vue.gach.work', // Set this to the origin making the request
-    credentials: true, // Allow credentials (cookies) to be sent with requests
+    credentials: false, // Allow credentials (cookies) to be sent with requests
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add necessary methods
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Add necessary headers
 }));
